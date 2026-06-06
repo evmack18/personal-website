@@ -1,0 +1,102 @@
+---
+import { site } from "../content/site";
+
+const phrases = site.nav.typingPhrases;
+const longestPhrase = phrases.reduce(
+  (longest, phrase) => (phrase.length > longest.length ? phrase : longest),
+  phrases[0],
+);
+---
+
+<p
+  class="font-light text-foreground sm:justify-self-end sm:text-right"
+  aria-live="polite"
+  aria-atomic="true"
+>
+  <span class="relative inline-block">
+    <span class="invisible select-none" aria-hidden="true">{longestPhrase}</span>
+    <span class="absolute inset-0 flex items-center justify-end whitespace-nowrap">
+      <span id="header-typing-text"></span><span
+        class="typing-cursor"
+        aria-hidden="true"></span>
+    </span>
+  </span>
+  <noscript>{phrases[0]}</noscript>
+</p>
+
+<script define:vars={{ phrases }}>
+  const TYPING_MS = 65;
+  const DELETING_MS = 35;
+  const PAUSE_MS = 2000;
+
+  let timeouts = [];
+
+  function clearTyping() {
+    timeouts.forEach((id) => window.clearTimeout(id));
+    timeouts = [];
+  }
+
+  function schedule(fn, delay) {
+    const id = window.setTimeout(fn, delay);
+    timeouts.push(id);
+    return id;
+  }
+
+  function initTyping() {
+    const textEl = document.getElementById("header-typing-text");
+    if (!textEl) return;
+
+    clearTyping();
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      textEl.textContent = phrases[0];
+      return;
+    }
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function tick() {
+      const phrase = phrases[phraseIndex];
+
+      if (!isDeleting) {
+        charIndex += 1;
+        textEl.textContent = phrase.slice(0, charIndex);
+
+        if (charIndex === phrase.length) {
+          schedule(() => {
+            isDeleting = true;
+            tick();
+          }, PAUSE_MS);
+          return;
+        }
+
+        schedule(tick, TYPING_MS);
+        return;
+      }
+
+      charIndex -= 1;
+      textEl.textContent = phrase.slice(0, charIndex);
+
+      if (charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        schedule(tick, TYPING_MS);
+        return;
+      }
+
+      schedule(tick, DELETING_MS);
+    }
+
+    tick();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTyping);
+  } else {
+    initTyping();
+  }
+
+  document.addEventListener("astro:page-load", initTyping);
+</script>

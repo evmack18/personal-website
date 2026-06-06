@@ -1,0 +1,12 @@
+---
+import { caseStudies } from "../content/projects";
+import CaseStudy from "./CaseStudy.astro";
+---
+
+<section
+  id="projects"
+  class="mt-[180px] space-y-[144px] pb-24 sm:mt-[220px]"
+  aria-label="Case studies"
+>
+  {caseStudies.map((study) => <CaseStudy study={study} />)}
+</section>

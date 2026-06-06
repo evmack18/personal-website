@@ -1,0 +1,28 @@
+---
+import { site } from "../content/site";
+---
+
+<section
+  class="px-5 pt-[75px] sm:px-20 sm:pt-[150px]"
+  aria-labelledby="hero-heading"
+>
+  <h1
+    id="hero-heading"
+    class="max-w-[1280px] font-serif text-[28px] font-normal leading-[38px] text-hero sm:text-[40px] sm:leading-[55px]"
+  >
+    {site.heroText}
+  </h1>
+
+  <nav class="mt-8 flex flex-wrap gap-3" aria-label="Hero">
+    {
+      site.heroNav.map((item) => (
+        <a
+          href={item.href}
+          class="rounded-full bg-[#262626] px-5 py-2 text-sm font-normal text-foreground transition-colors hover:bg-[#333333]"
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+</section>

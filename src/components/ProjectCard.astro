@@ -1,0 +1,65 @@
+---
+import type { Project } from "../content/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<article
+  class="flex flex-col rounded-xl border border-border bg-surface p-6"
+>
+  {
+    project.image && (
+      <img
+        src={project.image}
+        alt=""
+        class="mb-4 aspect-video w-full rounded-lg object-cover"
+        loading="lazy"
+      />
+    )
+  }
+  <h3 class="text-lg font-semibold text-foreground">{project.title}</h3>
+  <p class="mt-2 flex-1 text-sm text-muted">{project.description}</p>
+  <ul class="mt-4 flex flex-wrap gap-2" aria-label="Technologies">
+    {
+      project.tags.map((tag) => (
+        <li>
+          <span
+            class="rounded-md border border-border bg-background px-2 py-0.5 text-xs font-medium text-foreground"
+          >
+            {tag}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+  {
+    (project.url || project.repo) && (
+      <div class="mt-4 flex gap-4 text-sm">
+        {project.url && (
+          <a
+            href={project.url}
+            class="link-accent font-medium"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Live site
+          </a>
+        )}
+        {project.repo && (
+          <a
+            href={project.repo}
+            class="link-accent font-medium"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Repository
+          </a>
+        )}
+      </div>
+    )
+  }
+</article>

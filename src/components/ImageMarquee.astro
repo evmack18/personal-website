@@ -1,0 +1,199 @@
+---
+import {
+  buildMarqueeSequence,
+  getCarouselImages,
+} from "../lib/carousel";
+
+const images = getCarouselImages();
+const deckCount = 3;
+const sequence = buildMarqueeSequence(images, deckCount);
+const trackTiles = sequence.length > 0 ? [...sequence, ...sequence] : [];
+---
+
+<section
+  id="image-marquee"
+  class="marquee-section mt-[75px] overflow-hidden sm:mt-[220px]"
+  aria-label="Selected work"
+>
+  {
+    trackTiles.length > 0 ? (
+      <div id="marquee-track" class="marquee-track">
+        {trackTiles.map((src) => (
+          <img
+            src={src}
+            alt=""
+            width={250}
+            height={250}
+            class="size-[250px] shrink-0 bg-placeholder object-cover"
+            loading="lazy"
+            decoding="async"
+            draggable="false"
+          />
+        ))}
+      </div>
+    ) : (
+      <div id="marquee-track" class="marquee-track">
+        {Array.from({ length: 8 }).map(() => (
+          <div class="size-[250px] shrink-0 bg-placeholder" />
+        ))}
+      </div>
+    )
+  }
+</section>
+
+<script>
+  const LOOP_DURATION_S = 280;
+  const HOVER_SPEED_FACTOR = 0.12;
+
+  function initMarquee() {
+    const section = document.getElementById("image-marquee");
+    const track = document.getElementById("marquee-track");
+    if (!section || !track) return;
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    let offset = 0;
+    let lastTime = performance.now();
+    let isHovered = false;
+    let isDragging = false;
+    let isWheeling = false;
+    let wheelTimeout = 0;
+    let dragStartX = 0;
+    let dragStartOffset = 0;
+    let baseSpeed = 0;
+    let rafId = 0;
+
+    function halfWidth() {
+      return track.scrollWidth / 2;
+    }
+
+    function updateSpeed() {
+      const half = halfWidth();
+      if (half > 0) {
+        baseSpeed = half / LOOP_DURATION_S;
+      }
+    }
+
+    function normalizeOffset() {
+      const half = halfWidth();
+      if (half <= 0) return;
+
+      while (offset <= -half) offset += half;
+      while (offset > 0) offset -= half;
+
+      track.style.transform = `translateX(${offset}px)`;
+    }
+
+    function tick(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+
+      const autoActive =
+        !reducedMotion && !isDragging && !isWheeling && baseSpeed > 0;
+
+      if (autoActive) {
+        const speed = isHovered ? baseSpeed * HOVER_SPEED_FACTOR : baseSpeed;
+        offset -= speed * dt;
+        normalizeOffset();
+      }
+
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function onWheel(event) {
+      if (!isHovered) return;
+
+      event.preventDefault();
+      isWheeling = true;
+      window.clearTimeout(wheelTimeout);
+
+      const delta =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? event.deltaX
+          : event.deltaY;
+
+      offset -= delta;
+      normalizeOffset();
+
+      wheelTimeout = window.setTimeout(() => {
+        isWheeling = false;
+      }, 120);
+    }
+
+    function onPointerDown(event) {
+      if (!isHovered || event.button !== 0) return;
+
+      isDragging = true;
+      dragStartX = event.clientX;
+      dragStartOffset = offset;
+      section.setPointerCapture(event.pointerId);
+      section.classList.add("is-dragging");
+    }
+
+    function onPointerMove(event) {
+      if (!isDragging) return;
+
+      offset = dragStartOffset + (dragStartX - event.clientX);
+      normalizeOffset();
+    }
+
+    function onPointerUp(event) {
+      if (!isDragging) return;
+
+      isDragging = false;
+      section.classList.remove("is-dragging");
+      section.releasePointerCapture(event.pointerId);
+    }
+
+    section.addEventListener("mouseenter", () => {
+      isHovered = true;
+      section.classList.add("is-hovered");
+    });
+
+    section.addEventListener("mouseleave", () => {
+      isHovered = false;
+      isDragging = false;
+      isWheeling = false;
+      section.classList.remove("is-hovered", "is-dragging");
+    });
+
+    section.addEventListener("wheel", onWheel, { passive: false });
+    section.addEventListener("pointerdown", onPointerDown);
+    section.addEventListener("pointermove", onPointerMove);
+    section.addEventListener("pointerup", onPointerUp);
+    section.addEventListener("pointercancel", onPointerUp);
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateSpeed();
+      normalizeOffset();
+    });
+
+    resizeObserver.observe(track);
+
+    track.querySelectorAll("img").forEach((img) => {
+      if (!img.complete) {
+        img.addEventListener("load", updateSpeed, { once: true });
+      }
+    });
+
+    updateSpeed();
+    normalizeOffset();
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.clearTimeout(wheelTimeout);
+      resizeObserver.disconnect();
+    };
+  }
+
+  let cleanup = initMarquee();
+
+  document.addEventListener("astro:page-load", () => {
+    cleanup?.();
+    cleanup = initMarquee();
+  });
+</script>

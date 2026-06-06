@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-serif: "Libre Caslon Text", Georgia, serif;
+  --color-background: #161616;
+  --color-foreground: #e8e8e8;
+  --color-hero: #ececec;
+  --color-muted: #828282;
+  --color-title: #a6a6a6;
+  --color-placeholder: #d9d9d9;
+  --color-placeholder-light: #f1f1f1;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+::selection {
+  background-color: #006fff;
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: #006fff;
+  color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-foreground);
+  outline-offset: 2px;
+}
+
+.marquee-section {
+  cursor: default;
+}
+
+.marquee-section.is-hovered {
+  cursor: grab;
+}
+
+.marquee-section.is-dragging {
+  cursor: grabbing;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 16px;
+  will-change: transform;
+}
+
+@keyframes cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 1.5px;
+  height: 1em;
+  margin-left: 2px;
+  background-color: currentColor;
+  vertical-align: text-bottom;
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typing-cursor {
+    animation: none;
+    opacity: 1;
+  }
+}

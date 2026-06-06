@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import ImageMarquee from "../components/ImageMarquee.astro";
+import CaseStudies from "../components/CaseStudies.astro";
+import Expertise from "../components/Expertise.astro";
+import Info from "../components/Info.astro";
+import { site } from "../content/site";
+---
+
+<BaseLayout title={site.name}>
+  <Header />
+  <main id="main" class="pt-[100px]">
+    <Hero />
+    <ImageMarquee />
+    <CaseStudies />
+    <Expertise />
+    <Info />
+  </main>
+</BaseLayout>
