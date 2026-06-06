@@ -53,7 +53,7 @@ public/        # favicon, og-image.svg, optional images/
 
 ## Before first deploy
 
-1. Push the repo to `https://github.com/EvanMcCormack/personal-website` (or update project repo URLs in `src/content/projects.ts`).
+1. Push the repo to `https://github.com/evmack18/personal-website` (or update project repo URLs in `src/content/projects.ts`).
 2. Set `site` in `astro.config.mjs` to your Netlify URL (e.g. `https://your-site.netlify.app`).
 3. Add your LinkedIn URL in `src/content/site.ts` if you want it on the contact section.
 4. Replace the GitHub noreply email with your preferred address when ready.
