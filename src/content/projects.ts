@@ -44,6 +44,14 @@ const caseStudyContent = [
     slug: "zillow-rebrand",
     slideLabel: "Zillow rebrand",
   },
+  {
+    title: "Sonosite",
+    paragraphs: [
+      "Leading the end-to-end design of ultrasound devices across hardware, interface, and visual experience. I partnered with global engineering and human factors teams to bring intuitive, clinically focused products from concept through production.",
+    ],
+    slug: "sonosite",
+    slideLabel: "Sonosite",
+  },
 ] as const;
 
 export function getCaseStudies(): CaseStudy[] {
