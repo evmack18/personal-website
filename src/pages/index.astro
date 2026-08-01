@@ -1,21 +1,33 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Header from "../components/Header.astro";
+import FloatingNav from "../components/FloatingNav.astro";
+import PageContainer from "../components/PageContainer.astro";
 import Hero from "../components/Hero.astro";
 import ImageMarquee from "../components/ImageMarquee.astro";
 import CaseStudies from "../components/CaseStudies.astro";
-import Expertise from "../components/Expertise.astro";
-import Info from "../components/Info.astro";
+import Experience from "../components/Experience.astro";
+import Contact from "../components/Contact.astro";
 import { site } from "../content/site";
 ---
 
-<BaseLayout title={site.name}>
-  <Header />
-  <main id="main" class="pt-[100px]">
-    <Hero />
+<BaseLayout
+  title={site.name}
+  description={`${site.hero.lead} ${site.hero.typingPhrases[0]}`}
+>
+  <FloatingNav />
+  <main id="main" class="pt-[90px]">
+    <div class="px-5 sm:px-20">
+      <PageContainer class="pt-[88px] sm:pt-[142px]">
+        <Hero />
+      </PageContainer>
+    </div>
     <ImageMarquee />
-    <CaseStudies />
-    <Expertise />
-    <Info />
+    <div class="px-5 sm:px-20">
+      <PageContainer>
+        <CaseStudies />
+      </PageContainer>
+    </div>
+    <Experience />
+    <Contact />
   </main>
 </BaseLayout>

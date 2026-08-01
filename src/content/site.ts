@@ -1,28 +1,33 @@
 export const site = {
   name: "Evan McCormack",
-  nav: {
-    center: "Product Design Leadership",
+  mainNav: [
+    { label: "Work", href: "#projects" },
+    { label: "Experience", href: "#experience" },
+    { label: "Contact", href: "#contact" },
+  ],
+  hero: {
+    lead: "Product design leader with 15+ years shaping products, teams, and systems that scale. I help organizations",
+    status: "Open to new opportunities",
     typingPhrases: [
-      "Design Systems",
-      "Visual Design",
-      "Design Strategy",
-      "Platform Experiences",
-      "Product Design",
-      "Brand Design",
-      "Team Building",
-      "Design Operations",
+      "build design systems",
+      "shape visual languages",
+      "scale with confidence",
+      "design AI experiences",
+      "hire exceptional designers",
+      "raise the quality bar",
+      "align with brand",
     ],
   },
-  heroText:
-    "Product design leader with 15+ years of experience building products, systems, and teams that scale. From defining visual languages and design systems to shaping product strategy and organizational direction, I help companies create cohesive experiences across complex ecosystems while delivering meaningful outcomes for customers and the business.",
-  heroNav: [
-    { label: "Case studies", href: "#projects" },
-    { label: "Expertise", href: "#expertise" },
-    { label: "Info", href: "#info" },
-  ],
-  email: "e.mack18@gmail.com",
+  email: "ev.mack18@gmail.com",
   links: {
     github: "https://github.com/EvanMcCormack",
-    linkedin: "",
+    linkedin: "https://www.linkedin.com/in/evan-mccormack-72729720",
+  },
+  contact: {
+    intro:
+      "Interested in thoughtful design, ambitious teams, and meaningful problems. If that sounds like what you're building, let's connect.",
+    location: "SEATTLE, WA",
+    timeZone: "America/Los_Angeles",
+    resumeUrl: "/Evan_McCormack_Resume_2026.pdf",
   },
 } as const;

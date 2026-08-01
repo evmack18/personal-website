@@ -22,9 +22,9 @@ const trackTiles = sequence.length > 0 ? [...sequence, ...sequence] : [];
           <img
             src={src}
             alt=""
-            width={250}
-            height={250}
-            class="size-[250px] shrink-0 bg-placeholder object-cover"
+            width={300}
+            height={300}
+            class="size-[300px] shrink-0 rounded-[6px] bg-placeholder object-cover"
             loading="lazy"
             decoding="async"
             draggable="false"
@@ -34,7 +34,7 @@ const trackTiles = sequence.length > 0 ? [...sequence, ...sequence] : [];
     ) : (
       <div id="marquee-track" class="marquee-track">
         {Array.from({ length: 8 }).map(() => (
-          <div class="size-[250px] shrink-0 bg-placeholder" />
+          <div class="size-[300px] shrink-0 rounded-[6px] bg-placeholder" />
         ))}
       </div>
     )

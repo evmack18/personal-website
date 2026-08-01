@@ -1,0 +1,65 @@
+---
+import { experience, experienceIntro } from "../content/info";
+---
+
+<section
+  id="experience"
+  class="mt-[144px] bg-surface pb-24 pt-16 sm:pt-[137px]"
+  aria-labelledby="experience-heading"
+>
+  <div class="px-5 sm:px-20">
+    <div class="mx-auto w-full max-w-[1280px]">
+      <p
+        id="experience-heading"
+        class="text-[28px] font-normal leading-[36px] text-heading sm:text-[40px] sm:leading-[52px]"
+      >
+        {experienceIntro}
+      </p>
+
+      <div class="mt-16 space-y-[104px] sm:mt-24">
+        {
+          experience.map((entry) => (
+            <article>
+              <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                <h2 class="text-[30px] font-normal leading-[52px] text-heading">
+                  {entry.company}
+                </h2>
+                <p class="text-[18px] font-normal leading-normal text-text-secondary">
+                  {entry.role}
+                </p>
+              </div>
+
+              <p class="mt-5 max-w-[836px] text-[14px] leading-[21px] text-text-secondary">
+                {entry.description}
+              </p>
+
+              <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-[49px]">
+                {
+                  entry.images
+                    ? entry.images.map((image) => (
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          width={395}
+                          height={234}
+                          class="aspect-[395/234] w-full rounded-[6px] object-cover"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ))
+                    : Array.from({ length: 3 }).map((_, index) => (
+                        <div
+                          class="aspect-[395/234] w-full rounded-[6px] bg-placeholder-light"
+                          role="img"
+                          aria-label={`${entry.company} work sample ${index + 1} placeholder`}
+                        />
+                      ))
+                }
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

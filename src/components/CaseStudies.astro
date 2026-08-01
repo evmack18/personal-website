@@ -1,6 +1,8 @@
 ---
-import { caseStudies } from "../content/projects";
+import { getCaseStudies } from "../content/projects";
 import CaseStudy from "./CaseStudy.astro";
+
+const caseStudies = getCaseStudies();
 ---
 
 <section

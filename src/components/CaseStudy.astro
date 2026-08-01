@@ -6,77 +6,376 @@ interface Props {
 }
 
 const { study } = Astro.props;
+const slideCount = Math.max(study.slides.length, 1);
+const initialSlideLabel = `01 / ${String(slideCount).padStart(2, "0")}`;
 ---
 
-<article class="case-study px-5 sm:px-20">
+<article class="case-study">
   <div
-    class="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between"
+    class="case-study-carousel"
+    data-slide-count={slideCount}
+    data-title={study.title}
   >
     <div
-      class="order-2 w-full max-w-[315px] shrink-0 lg:order-1 lg:pt-[75px]"
+      class="case-study-carousel__media relative w-full cursor-none overflow-hidden rounded-[6px] bg-placeholder-light"
+      role="group"
+      aria-roledescription="carousel"
+      aria-label={`${study.title} image carousel`}
     >
-      <h2 class="text-[16px] font-bold leading-6 text-title">
-        {study.title}
-      </h2>
-      <div class="mt-3 space-y-0 text-[14px] leading-[21px] text-muted">
-        {study.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
-      </div>
+      {
+        study.slides.length > 0 ? (
+          <div class="case-study-carousel__viewport">
+            <div class="case-study-carousel__track">
+              {study.slides.map((slide, index) => (
+                <div
+                  class="case-study-carousel__slide"
+                  data-slide-index={index}
+                  aria-hidden={index !== 0}
+                >
+                  {
+                    slide.type === "video" ? (
+                      <video
+                        src={slide.src}
+                        class="case-study-carousel__video block w-full h-auto"
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload={index <= 1 ? "auto" : "metadata"}
+                        aria-label={slide.alt}
+                      />
+                    ) : (
+                      <img
+                        src={slide.src}
+                        alt={slide.alt}
+                        class="block w-full h-auto"
+                        loading={index <= 1 ? "eager" : "lazy"}
+                        decoding="async"
+                      />
+                    )
+                  }
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div
+            class="case-study-carousel__slide case-study-carousel__slide--placeholder aspect-[16/9] w-full bg-placeholder-light"
+            aria-hidden="true"
+          />
+        )
+      }
     </div>
 
     <div
-      class="order-1 w-full shrink-0 lg:order-2 lg:w-[min(1050px,calc(100%-380px))]"
+      class="case-study-carousel__cursor pointer-events-none fixed z-[100] hidden size-[58px] text-[#161616]"
+      aria-hidden="true"
     >
-      <div
-        class="aspect-[7/4] w-full bg-placeholder-light"
-        role="img"
-        aria-label={`${study.title} preview placeholder`}
+      <svg
+        class="case-study-carousel__arrow case-study-carousel__arrow--left absolute inset-0 size-[58px] -scale-x-100"
+        viewBox="0 0 58 58"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
       >
-      </div>
-      <div class="mt-4 flex w-full items-center justify-between">
-        <div class="flex items-center gap-[15px]">
-          <button
-            type="button"
-            class="flex size-5 items-center justify-center text-muted"
-            aria-label="Previous slide"
+        <path
+          d="M55.3636 29L29 55.3662L26.1088 52.475L47.5344 31.0468L2.63636 31.0468L2.63636 26.9558L47.5369 26.9558L26.1088 5.52761L29 2.63636L55.3636 29Z"
+          fill="currentColor"></path>
+      </svg>
+      <svg
+        class="case-study-carousel__arrow case-study-carousel__arrow--right absolute inset-0 size-[58px]"
+        viewBox="0 0 58 58"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M55.3636 29L29 55.3662L26.1088 52.475L47.5344 31.0468L2.63636 31.0468L2.63636 26.9558L47.5369 26.9558L26.1088 5.52761L29 2.63636L55.3636 29Z"
+          fill="currentColor"></path>
+      </svg>
+    </div>
+
+    <div class="mt-4 flex w-full items-center justify-between">
+      <div class="flex items-center gap-[15px]">
+        <button
+          type="button"
+          class="case-study-carousel__prev flex size-5 items-center justify-center text-muted transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+          data-action="prev"
+          aria-label="Previous slide"
+          disabled={study.slides.length <= 1}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M16 10H4M4 10L9 5M4 10L9 15"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"></path>
-            </svg>
-          </button>
-          <button
-            type="button"
-            class="flex size-5 items-center justify-center text-muted"
-            aria-label="Next slide"
+            <path
+              d="M16 10H4M4 10L9 5M4 10L9 15"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="case-study-carousel__next flex size-5 items-center justify-center text-muted transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+          data-action="next"
+          aria-label="Next slide"
+          disabled={study.slides.length <= 1}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M4 10H16M16 10L11 5M16 10L11 15"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"></path>
-            </svg>
-          </button>
-        </div>
-        <p class="text-[14px] text-muted">{study.slideLabel}</p>
+            <path
+              d="M4 10H16M16 10L11 5M16 10L11 15"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </button>
       </div>
+      <p class="case-study-carousel__label text-[14px] text-muted">
+        {initialSlideLabel}
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-10 max-w-[836px]">
+    <h2 class="text-[30px] font-normal leading-6 text-heading">
+      {study.title}
+    </h2>
+    <div class="mt-5 space-y-0 text-[14px] leading-[21px] text-muted">
+      {study.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
     </div>
   </div>
 </article>
+
+<script>
+  function formatSlideLabel(current, total) {
+    return `${String(current + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
+  }
+
+  function initCaseStudyCarousels() {
+    document.querySelectorAll(".case-study-carousel").forEach((carousel) => {
+      if (carousel.dataset.initialized === "true") return;
+      carousel.dataset.initialized = "true";
+
+      const media = carousel.querySelector(".case-study-carousel__media");
+      const track = carousel.querySelector(".case-study-carousel__track");
+      const cursor = carousel.querySelector(".case-study-carousel__cursor");
+      const label = carousel.querySelector(".case-study-carousel__label");
+      const prevButton = carousel.querySelector('[data-action="prev"]');
+      const nextButton = carousel.querySelector('[data-action="next"]');
+      const slides = carousel.querySelectorAll(
+        ".case-study-carousel__slide:not(.case-study-carousel__slide--placeholder)",
+      );
+      const total = slides.length || Number(carousel.dataset.slideCount) || 1;
+      const title = carousel.dataset.title || "Case study";
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (!media || !cursor || !label || !prevButton || !nextButton) return;
+      if (total > 1 && !track) return;
+
+      let current = 0;
+      let isAnimating = false;
+
+      const wrapIndex = (index) => ((index % total) + total) % total;
+
+      const updateCarousel = () => {
+        label.textContent = formatSlideLabel(current, total);
+        const canLoop = total > 1;
+        prevButton.disabled = !canLoop;
+        nextButton.disabled = !canLoop;
+        media.setAttribute(
+          "aria-label",
+          `${title} image carousel, slide ${current + 1} of ${total}`,
+        );
+
+        slides.forEach((slide, index) => {
+          slide.setAttribute("aria-hidden", String(index !== current));
+        });
+
+        syncSlideMedia();
+      };
+
+      const preloadSlide = (index) => {
+        const slide = slides[wrapIndex(index)];
+        if (!slide) return;
+
+        const image = slide.querySelector("img");
+        if (image && image.loading === "lazy") {
+          image.loading = "eager";
+        }
+
+        const video = slide.querySelector("video");
+        if (video && video.preload === "none") {
+          video.preload = "metadata";
+        }
+      };
+
+      const syncSlideMedia = () => {
+        slides.forEach((slide, index) => {
+          const video = slide.querySelector("video");
+          if (!video) return;
+
+          if (index === current) {
+            video.currentTime = 0;
+            video.play().catch(() => {});
+            return;
+          }
+
+          video.pause();
+        });
+      };
+
+      const goToSlide = (index, { instant = false } = {}) => {
+        const next = wrapIndex(index);
+        if (next === current || isAnimating || !track || total <= 1) return;
+
+        preloadSlide(next);
+        preloadSlide(next + 1);
+        preloadSlide(next - 1);
+
+        if (instant || prefersReducedMotion) {
+          track.style.transition = "none";
+        }
+
+        current = next;
+        track.style.transform = `translate3d(-${current * 100}%, 0, 0)`;
+        updateCarousel();
+
+        if (instant || prefersReducedMotion) {
+          track.getBoundingClientRect();
+          track.style.transition = "";
+        }
+      };
+
+      if (track && !prefersReducedMotion) {
+        track.addEventListener("transitionrun", () => {
+          isAnimating = true;
+        });
+
+        track.addEventListener("transitionend", (event) => {
+          if (event.propertyName !== "transform") return;
+          isAnimating = false;
+        });
+      }
+
+      const navigateByStep = (step) => {
+        if (isAnimating || total <= 1) return;
+
+        const next = wrapIndex(current + step);
+        const isWrap = Math.abs(next - current) > 1;
+        goToSlide(next, { instant: isWrap });
+      };
+
+      const setCursorSide = (isLeft) => {
+        cursor.classList.toggle("is-left", isLeft);
+        cursor.classList.toggle("is-right", !isLeft);
+        cursor.classList.toggle("is-disabled", total <= 1);
+      };
+
+      const moveCursor = (clientX, clientY, isLeft) => {
+        cursor.style.left = `${clientX}px`;
+        cursor.style.top = `${clientY}px`;
+        setCursorSide(isLeft);
+        cursor.classList.remove("hidden");
+      };
+
+      const hideCursor = () => {
+        cursor.classList.add("hidden");
+      };
+
+      media.addEventListener("mousemove", (event) => {
+        const rect = media.getBoundingClientRect();
+        const isLeft = event.clientX - rect.left < rect.width / 2;
+        moveCursor(event.clientX, event.clientY, isLeft);
+      });
+
+      media.addEventListener("mouseleave", hideCursor);
+
+      media.addEventListener("click", (event) => {
+        const rect = media.getBoundingClientRect();
+        const isLeft = event.clientX - rect.left < rect.width / 2;
+
+        if (isLeft) {
+          navigateByStep(-1);
+          return;
+        }
+
+        navigateByStep(1);
+      });
+
+      prevButton.addEventListener("click", () => {
+        navigateByStep(-1);
+      });
+
+      nextButton.addEventListener("click", () => {
+        navigateByStep(1);
+      });
+
+      updateCarousel();
+    });
+  }
+
+  initCaseStudyCarousels();
+  document.addEventListener("astro:page-load", initCaseStudyCarousels);
+</script>
+
+<style>
+  .case-study-carousel__viewport {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .case-study-carousel__track {
+    display: flex;
+    width: 100%;
+    will-change: transform;
+    transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .case-study-carousel__slide {
+    flex: 0 0 100%;
+    min-width: 100%;
+  }
+
+  .case-study-carousel__cursor {
+    transform: translate(-50%, -50%);
+  }
+
+  .case-study-carousel__arrow {
+    display: none;
+  }
+
+  .case-study-carousel__cursor.is-left .case-study-carousel__arrow--left,
+  .case-study-carousel__cursor.is-right .case-study-carousel__arrow--right {
+    display: block;
+  }
+
+  .case-study-carousel__cursor.is-disabled {
+    opacity: 0.35;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .case-study-carousel__media {
+      cursor: default;
+    }
+
+    .case-study-carousel__track {
+      transition: none;
+    }
+
+    .case-study-carousel__cursor {
+      display: none !important;
+    }
+  }
+</style>

@@ -1,28 +1,115 @@
 ---
 import { site } from "../content/site";
+
+const phrases = site.hero.typingPhrases;
+const longestPhrase = phrases.reduce(
+  (longest, phrase) => (phrase.length > longest.length ? phrase : longest),
+  phrases[0],
+);
 ---
 
-<section
-  class="px-5 pt-[75px] sm:px-20 sm:pt-[150px]"
-  aria-labelledby="hero-heading"
->
+<section aria-labelledby="hero-heading">
   <h1
     id="hero-heading"
-    class="max-w-[1280px] font-serif text-[28px] font-normal leading-[38px] text-hero sm:text-[40px] sm:leading-[55px]"
+    class="max-w-[922px] text-[28px] font-light leading-[37px] text-hero-muted sm:text-[40px] sm:leading-[49px]"
   >
-    {site.heroText}
+    {site.hero.lead}{" "}
+    <span
+      class="relative inline-block align-bottom font-semibold text-heading"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <span class="invisible select-none whitespace-nowrap" aria-hidden="true"
+        >{longestPhrase}</span
+      >
+      <span class="absolute inset-0 whitespace-nowrap">
+        <span id="hero-typing-text"></span><span
+          class="typing-cursor"
+          aria-hidden="true"></span>
+      </span>
+    </span>
+    <noscript>{phrases[0]}</noscript>
   </h1>
 
-  <nav class="mt-8 flex flex-wrap gap-3" aria-label="Hero">
-    {
-      site.heroNav.map((item) => (
-        <a
-          href={item.href}
-          class="rounded-full bg-[#262626] px-5 py-2 text-sm font-normal text-foreground transition-colors hover:bg-[#333333]"
-        >
-          {item.label}
-        </a>
-      ))
-    }
-  </nav>
+  <p class="mt-10 flex items-center gap-2.5 text-[14px] leading-none text-status">
+    <span class="status-dot" aria-hidden="true"></span>
+    {site.hero.status}
+  </p>
 </section>
+
+<script define:vars={{ phrases }}>
+  const TYPING_MS = 65;
+  const DELETING_MS = 35;
+  const PAUSE_MS = 2000;
+
+  let timeouts = [];
+
+  function clearTyping() {
+    timeouts.forEach((id) => window.clearTimeout(id));
+    timeouts = [];
+  }
+
+  function schedule(fn, delay) {
+    const id = window.setTimeout(fn, delay);
+    timeouts.push(id);
+    return id;
+  }
+
+  function initHeroTyping() {
+    const textEl = document.getElementById("hero-typing-text");
+    if (!textEl) return;
+
+    clearTyping();
+
+    const defaultPhrase = phrases[0];
+    textEl.textContent = defaultPhrase;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    let phraseIndex = 0;
+    let charIndex = defaultPhrase.length;
+    let isDeleting = false;
+
+    function tick() {
+      const phrase = phrases[phraseIndex];
+
+      if (!isDeleting) {
+        charIndex += 1;
+        textEl.textContent = phrase.slice(0, charIndex);
+
+        if (charIndex === phrase.length) {
+          schedule(() => {
+            isDeleting = true;
+            tick();
+          }, PAUSE_MS);
+          return;
+        }
+
+        schedule(tick, TYPING_MS);
+        return;
+      }
+
+      charIndex -= 1;
+      textEl.textContent = phrase.slice(0, charIndex);
+
+      if (charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        schedule(tick, TYPING_MS);
+        return;
+      }
+
+      schedule(tick, DELETING_MS);
+    }
+
+    schedule(() => {
+      isDeleting = true;
+      tick();
+    }, PAUSE_MS);
+  }
+
+  initHeroTyping();
+  document.addEventListener("astro:page-load", initHeroTyping);
+</script>

@@ -1,0 +1,80 @@
+---
+import { site } from "../content/site";
+import ThemeToggle from "./ThemeToggle.astro";
+---
+
+<a
+  href="#main"
+  class="sr-only focus:not-sr-only focus:absolute focus:left-5 focus:top-5 focus:z-[60] focus:rounded-md focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
+>
+  Skip to content
+</a>
+
+<div
+  data-floating-nav
+  class="floating-nav fixed inset-x-0 top-0 z-50 px-5 pt-9 sm:px-20"
+>
+  <nav
+    class="mx-auto flex h-[54px] max-w-[1280px] items-center justify-between rounded-[6px] bg-nav px-6 sm:px-8"
+    aria-label="Primary"
+  >
+    <a
+      href="#main"
+      class="text-[16px] font-semibold leading-none text-foreground transition-opacity hover:opacity-80"
+    >
+      {site.name}
+    </a>
+
+    <div class="flex items-center gap-1 sm:gap-2">
+      <ul class="flex items-center gap-1 sm:gap-2">
+        {
+          site.mainNav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="rounded-[6px] px-3 py-2 text-[16px] font-light leading-none text-foreground transition-colors hover:bg-nav-hover"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <ThemeToggle />
+    </div>
+  </nav>
+</div>
+
+<script is:inline>
+  (() => {
+    const nav = document.querySelector("[data-floating-nav]");
+    if (!nav || nav.dataset.scrollInit) return;
+    nav.dataset.scrollInit = "true";
+
+    let lastScrollY = window.scrollY;
+    let hidden = false;
+
+    const setHidden = (value) => {
+      if (hidden === value) return;
+      hidden = value;
+      nav.classList.toggle("is-hidden", hidden);
+    };
+
+    const onScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= 0) {
+        setHidden(false);
+      } else if (currentScrollY > lastScrollY) {
+        setHidden(true);
+      } else if (currentScrollY < lastScrollY) {
+        setHidden(false);
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+  })();
+</script>
