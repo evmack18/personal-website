@@ -15,6 +15,7 @@
   --color-nav-hover: var(--theme-nav-hover);
   --color-surface: var(--theme-surface);
   --color-accent-bar: var(--theme-accent-bar);
+  --color-grid-line: var(--theme-grid-line);
   --color-status: var(--theme-status);
   --color-placeholder: var(--theme-placeholder);
   --color-placeholder-light: var(--theme-placeholder-light);
@@ -35,6 +36,7 @@ html[data-theme="dark"] {
   --theme-nav-hover: #3f3f3f;
   --theme-surface: #282828;
   --theme-accent-bar: #313131;
+  --theme-grid-line: #2f2f2f;
   --theme-status: #4ade80;
   --theme-placeholder: #d9d9d9;
   --theme-placeholder-light: #f1f1f1;
@@ -54,6 +56,7 @@ html[data-theme="light"] {
   --theme-nav-hover: #dcdcdc;
   --theme-surface: #ebebeb;
   --theme-accent-bar: #d4d4d4;
+  --theme-grid-line: #d0d0d0;
   --theme-status: #16a34a;
   --theme-placeholder: #bdbdbd;
   --theme-placeholder-light: #d9d9d9;
@@ -170,18 +173,67 @@ html[data-theme="light"] .theme-toggle__icon--light {
   body {
     transition: none;
   }
-
-  .floating-nav {
-    transition: none;
-  }
 }
 
-.floating-nav {
-  transition: transform 300ms ease-out;
-  will-change: transform;
+.grid-content-inset {
+  padding-inline: 20px;
 }
 
-.floating-nav.is-hidden {
-  transform: translateY(-100%);
+.marquee-zone {
+  position: relative;
+  width: 100%;
+}
+
+.marquee-zone__line {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-grid-line);
+}
+
+.site-column {
+  position: relative;
+}
+
+.site-grid-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: var(--color-grid-line);
   pointer-events: none;
+  z-index: 2;
+}
+
+.site-grid-line--left {
+  left: 0;
+}
+
+.site-grid-line--right {
+  right: 0;
+}
+
+.site-full-bleed-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 1;
+  width: 100vw;
+  transform: translateX(-50%);
+}
+
+.site-full-bleed-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  transform: translateX(-50%);
+  background-color: var(--color-grid-line);
+}
+
+.structural-line {
+  height: 1px;
+  width: 100%;
+  background-color: var(--color-grid-line);
 }

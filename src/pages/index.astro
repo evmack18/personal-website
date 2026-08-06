@@ -14,20 +14,36 @@ import { site } from "../content/site";
   title={site.name}
   description={`${site.hero.lead} ${site.hero.typingPhrases[0]}`}
 >
-  <FloatingNav />
-  <main id="main" class="pt-[90px]">
+  <main id="main">
     <div class="px-5 sm:px-20">
-      <PageContainer class="pt-[88px] sm:pt-[142px]">
-        <Hero />
-      </PageContainer>
+      <div class="site-column relative mx-auto w-full max-w-[1280px]">
+        <div class="site-grid-line site-grid-line--left" aria-hidden="true"></div>
+        <div class="site-grid-line site-grid-line--right" aria-hidden="true"></div>
+
+        <FloatingNav />
+        <PageContainer class="pt-[88px] pb-[75px] sm:pt-[142px] sm:pb-[220px]">
+          <Hero />
+        </PageContainer>
+      </div>
     </div>
-    <ImageMarquee />
+
+    <div class="marquee-zone">
+      <div class="marquee-zone__line" aria-hidden="true"></div>
+      <ImageMarquee />
+      <div class="marquee-zone__line" aria-hidden="true"></div>
+    </div>
+
     <div class="px-5 sm:px-20">
-      <PageContainer>
-        <CaseStudies />
-      </PageContainer>
+      <div class="site-column relative mx-auto w-full max-w-[1280px] pt-[180px] sm:pt-[220px]">
+        <div class="site-grid-line site-grid-line--left" aria-hidden="true"></div>
+        <div class="site-grid-line site-grid-line--right" aria-hidden="true"></div>
+
+        <PageContainer>
+          <CaseStudies />
+        </PageContainer>
+        <Experience />
+        <Contact />
+      </div>
     </div>
-    <Experience />
-    <Contact />
   </main>
 </BaseLayout>

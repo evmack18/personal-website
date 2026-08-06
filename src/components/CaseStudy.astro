@@ -17,7 +17,7 @@ const initialSlideLabel = `01 / ${String(slideCount).padStart(2, "0")}`;
     data-title={study.title}
   >
     <div
-      class="case-study-carousel__media relative w-full cursor-none overflow-hidden rounded-[6px] bg-placeholder-light"
+      class="case-study-carousel__media relative w-full cursor-none overflow-hidden bg-placeholder-light"
       role="group"
       aria-roledescription="carousel"
       aria-label={`${study.title} image carousel`}
@@ -93,11 +93,11 @@ const initialSlideLabel = `01 / ${String(slideCount).padStart(2, "0")}`;
       </svg>
     </div>
 
-    <div class="mt-4 flex w-full items-center justify-between">
+    <div class="mt-4 flex w-full items-center justify-between grid-content-inset">
       <div class="flex items-center gap-[15px]">
         <button
           type="button"
-          class="case-study-carousel__prev flex size-5 items-center justify-center text-muted transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+          class="case-study-carousel__prev flex size-5 items-center justify-center text-muted transition-colors hover:text-heading disabled:cursor-not-allowed disabled:opacity-40"
           data-action="prev"
           aria-label="Previous slide"
           disabled={study.slides.length <= 1}
@@ -119,7 +119,7 @@ const initialSlideLabel = `01 / ${String(slideCount).padStart(2, "0")}`;
         </button>
         <button
           type="button"
-          class="case-study-carousel__next flex size-5 items-center justify-center text-muted transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+          class="case-study-carousel__next flex size-5 items-center justify-center text-muted transition-colors hover:text-heading disabled:cursor-not-allowed disabled:opacity-40"
           data-action="next"
           aria-label="Next slide"
           disabled={study.slides.length <= 1}
@@ -146,7 +146,7 @@ const initialSlideLabel = `01 / ${String(slideCount).padStart(2, "0")}`;
     </div>
   </div>
 
-  <div class="mt-10 max-w-[836px]">
+  <div class="mt-10 max-w-[836px] grid-content-inset">
     <h2 class="text-[30px] font-normal leading-6 text-heading">
       {study.title}
     </h2>
@@ -154,6 +154,8 @@ const initialSlideLabel = `01 / ${String(slideCount).padStart(2, "0")}`;
       {study.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
     </div>
   </div>
+
+  <div class="structural-line mt-8" aria-hidden="true"></div>
 </article>
 
 <script>
@@ -346,6 +348,11 @@ const initialSlideLabel = `01 / ${String(slideCount).padStart(2, "0")}`;
   .case-study-carousel__slide {
     flex: 0 0 100%;
     min-width: 100%;
+  }
+
+  .case-study-carousel__prev:not(:disabled):hover svg path,
+  .case-study-carousel__next:not(:disabled):hover svg path {
+    stroke-width: 2.25;
   }
 
   .case-study-carousel__cursor {

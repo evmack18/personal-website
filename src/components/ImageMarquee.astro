@@ -12,7 +12,7 @@ const trackTiles = sequence.length > 0 ? [...sequence, ...sequence] : [];
 
 <section
   id="image-marquee"
-  class="marquee-section mt-[75px] overflow-hidden sm:mt-[220px]"
+  class="marquee-section relative z-[3] w-full overflow-hidden py-5"
   aria-label="Selected work"
 >
   {
@@ -24,7 +24,7 @@ const trackTiles = sequence.length > 0 ? [...sequence, ...sequence] : [];
             alt=""
             width={300}
             height={300}
-            class="size-[300px] shrink-0 rounded-[6px] bg-placeholder object-cover"
+            class="size-[300px] shrink-0 bg-placeholder object-cover"
             loading="lazy"
             decoding="async"
             draggable="false"
@@ -34,7 +34,7 @@ const trackTiles = sequence.length > 0 ? [...sequence, ...sequence] : [];
     ) : (
       <div id="marquee-track" class="marquee-track">
         {Array.from({ length: 8 }).map(() => (
-          <div class="size-[300px] shrink-0 rounded-[6px] bg-placeholder" />
+          <div class="size-[300px] shrink-0 bg-placeholder" />
         ))}
       </div>
     )
