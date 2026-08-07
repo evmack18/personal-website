@@ -1,0 +1,15 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class="px-5 sm:px-20">
+  <div class:list={["site-column relative mx-auto w-full max-w-[1280px]", className]}>
+    <div class="site-grid-line site-grid-line--left" aria-hidden="true"></div>
+    <div class="site-grid-line site-grid-line--right" aria-hidden="true"></div>
+    <slot />
+  </div>
+</div>

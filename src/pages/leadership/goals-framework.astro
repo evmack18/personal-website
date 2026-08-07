@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FloatingNav from "../../components/FloatingNav.astro";
+import PageContainer from "../../components/PageContainer.astro";
+import SiteColumn from "../../components/SiteColumn.astro";
+import LeadershipPageContent from "../../components/leadership/LeadershipPageContent.astro";
+import { leadership } from "../../content/leadership";
+import { site } from "../../content/site";
+---
+
+<BaseLayout
+  title={`Leadership – ${site.name}`}
+  description={leadership.hero}
+>
+  <main id="main">
+    <SiteColumn>
+      <FloatingNav />
+      <PageContainer class="pt-[88px] pb-24 sm:pt-[142px]">
+        <LeadershipPageContent initialTab="goals-framework" />
+      </PageContainer>
+    </SiteColumn>
+  </main>
+</BaseLayout>

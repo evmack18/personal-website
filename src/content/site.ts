@@ -1,9 +1,10 @@
 export const site = {
   name: "Evan McCormack",
   mainNav: [
-    { label: "Work", href: "#projects" },
-    { label: "Experience", href: "#experience" },
-    { label: "Contact", href: "#contact" },
+    { label: "Work", href: "/#projects" },
+    { label: "Experience", href: "/#experience" },
+    { label: "Leadership", href: "/leadership" },
+    { label: "Let's talk", href: "/#contact" },
   ],
   hero: {
     lead: "Product design leader with 15+ years shaping products, teams, and systems that scale. I help organizations",

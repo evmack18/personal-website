@@ -1,0 +1,157 @@
+---
+import LeadershipHero from "./LeadershipHero.astro";
+import LeadershipTabs from "./LeadershipTabs.astro";
+import LeadershipValues from "./LeadershipValues.astro";
+import LeadershipOperations from "./LeadershipOperations.astro";
+import LeadershipGoalsFramework from "./LeadershipGoalsFramework.astro";
+import { leadership } from "../../content/leadership";
+
+interface Props {
+  initialTab?: string;
+}
+
+const { initialTab = "values" } = Astro.props;
+
+const tabPaths: Record<string, string> = Object.fromEntries(
+  leadership.tabs.map((tab) => [tab.id, tab.path]),
+);
+---
+
+<div data-leadership-tabs data-initial-tab={initialTab} data-tab-paths={JSON.stringify(tabPaths)}>
+  <LeadershipHero />
+  <LeadershipTabs initialTab={initialTab} />
+
+  <div class="leadership-tab-panels">
+    <div
+      id="leadership-panel-values"
+      role="tabpanel"
+      aria-labelledby="leadership-tab-values"
+      data-tab-panel="values"
+      hidden={initialTab !== "values"}
+    >
+      <LeadershipValues />
+    </div>
+    <div
+      id="leadership-panel-operations"
+      role="tabpanel"
+      aria-labelledby="leadership-tab-operations"
+      data-tab-panel="operations"
+      hidden={initialTab !== "operations"}
+    >
+      <LeadershipOperations />
+    </div>
+    <div
+      id="leadership-panel-goals-framework"
+      role="tabpanel"
+      aria-labelledby="leadership-tab-goals-framework"
+      data-tab-panel="goals-framework"
+      hidden={initialTab !== "goals-framework"}
+    >
+      <LeadershipGoalsFramework />
+    </div>
+  </div>
+</div>
+
+<script>
+  function initLeadershipTabs(root: HTMLElement) {
+    const initialTab = root.dataset.initialTab ?? "values";
+    const tabPaths = JSON.parse(root.dataset.tabPaths ?? "{}") as Record<string, string>;
+    const tabList = root.querySelector<HTMLElement>('[role="tablist"]');
+    const tabs = root.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    const panels = root.querySelectorAll<HTMLElement>("[data-tab-panel]");
+    const tabsNav = root.querySelector<HTMLElement>(".leadership-tabs");
+    const indicator = root.querySelector<HTMLElement>(".leadership-tab-indicator");
+
+    if (!tabList || !tabsNav || !indicator || tabs.length === 0) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function getTabFromPath(pathname: string): string {
+      if (pathname.endsWith("/operations")) return "operations";
+      if (pathname.endsWith("/goals-framework")) return "goals-framework";
+      return "values";
+    }
+
+    function positionIndicator(tab: HTMLButtonElement, animate: boolean) {
+      const navRect = tabsNav!.getBoundingClientRect();
+      const tabRect = tab.getBoundingClientRect();
+      const left = tabRect.left - navRect.left;
+
+      if (!animate || prefersReducedMotion) {
+        indicator!.style.transition = "none";
+      } else {
+        indicator!.style.transition = "";
+      }
+
+      indicator!.style.width = `${tabRect.width}px`;
+      indicator!.style.transform = `translateX(${left}px)`;
+
+      if (!animate || prefersReducedMotion) {
+        requestAnimationFrame(() => {
+          indicator!.style.transition = "";
+        });
+      }
+    }
+
+    function setActiveTab(tabId: string, animate = true) {
+      tabs.forEach((tab) => {
+        const isActive = tab.dataset.tab === tabId;
+        tab.setAttribute("aria-selected", String(isActive));
+        tab.tabIndex = isActive ? 0 : -1;
+      });
+
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.tabPanel !== tabId;
+      });
+
+      const activeTab = root.querySelector<HTMLButtonElement>(`[role="tab"][data-tab="${tabId}"]`);
+      if (activeTab) positionIndicator(activeTab, animate);
+    }
+
+    function navigateToTab(tabId: string, animate = true) {
+      setActiveTab(tabId, animate);
+
+      const path = tabPaths[tabId];
+      if (path && window.location.pathname !== path) {
+        history.pushState({ leadershipTab: tabId }, "", path);
+      }
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const tabId = tab.dataset.tab;
+        if (tabId) navigateToTab(tabId);
+      });
+
+      tab.addEventListener("keydown", (event) => {
+        const tabArray = Array.from(tabs);
+        const index = tabArray.indexOf(tab);
+
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          const next = tabArray[(index + 1) % tabArray.length];
+          next.focus();
+          navigateToTab(next.dataset.tab!);
+        } else if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          const prev = tabArray[(index - 1 + tabArray.length) % tabArray.length];
+          prev.focus();
+          navigateToTab(prev.dataset.tab!);
+        }
+      });
+    });
+
+    window.addEventListener("popstate", () => {
+      navigateToTab(getTabFromPath(window.location.pathname), true);
+    });
+
+    window.addEventListener("resize", () => {
+      const activeTab = root.querySelector<HTMLButtonElement>('[role="tab"][aria-selected="true"]');
+      if (activeTab) positionIndicator(activeTab, false);
+    });
+
+    setActiveTab(initialTab, false);
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-leadership-tabs]").forEach(initLeadershipTabs);
+</script>

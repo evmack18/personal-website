@@ -1,0 +1,39 @@
+---
+import { leadership } from "../../content/leadership";
+
+interface Props {
+  initialTab?: string;
+}
+
+const { initialTab = "values" } = Astro.props;
+---
+
+<nav class="leadership-tabs grid-content-inset mt-12 sm:mt-16" aria-label="Leadership sections">
+  <ul class="leadership-tabs__list flex flex-wrap items-end gap-x-8 gap-y-3 leading-none" role="tablist">
+    {
+      leadership.tabs.map((tab) => {
+        const isActive = tab.id === initialTab;
+
+        return (
+          <li role="presentation">
+            <button
+              type="button"
+              id={`leadership-tab-${tab.id}`}
+              class="leadership-tab"
+              role="tab"
+              data-tab={tab.id}
+              aria-selected={isActive}
+              aria-controls={`leadership-panel-${tab.id}`}
+              tabindex={isActive ? 0 : -1}
+            >
+              {tab.label}
+            </button>
+          </li>
+        );
+      })
+    }
+  </ul>
+  <div class="leadership-tab-indicator" aria-hidden="true"></div>
+</nav>
+
+<div class="site-viewport-line" aria-hidden="true"></div>

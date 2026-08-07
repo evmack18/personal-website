@@ -1,0 +1,47 @@
+---
+import { leadership } from "../../content/leadership";
+
+const { goalsFramework } = leadership;
+---
+
+<section id="goals-framework" aria-labelledby="goals-framework-intro">
+  <h2
+    id="goals-framework-intro"
+    class="grid-content-inset mt-10 max-w-[922px] text-[28px] font-light leading-[36px] text-heading sm:mt-12"
+  >
+    {goalsFramework.intro}
+  </h2>
+
+  <div class="leadership-values-panel mt-12 sm:mt-16">
+    <div class="site-viewport-line" aria-hidden="true"></div>
+
+    <div class="leadership-operations-grid">
+      {
+        goalsFramework.items.map((goal) => (
+          <article class="leadership-values-grid__cell">
+            <h3 class="text-[18px] font-light leading-[24px] text-heading">
+              {goal.titlePrefix}{" "}
+              <span class="font-semibold">{goal.titleEmphasis}</span>
+            </h3>
+            <p class="mt-4 text-[14px] leading-[21px] text-text-secondary">
+              {goal.tagline}
+            </p>
+            <p class="mt-4 text-[14px] leading-[21px] text-text-secondary">
+              {goal.description}
+            </p>
+            <div class="mt-6">
+              <p class="text-[14px] font-semibold leading-[21px] text-heading">
+                Question:
+              </p>
+              <p class="mt-2 text-[14px] italic leading-[21px] text-text-secondary">
+                {goal.question}
+              </p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="site-viewport-line" aria-hidden="true"></div>
+  </div>
+</section>

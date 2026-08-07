@@ -36,7 +36,7 @@ html[data-theme="dark"] {
   --theme-nav-hover: #3f3f3f;
   --theme-surface: #282828;
   --theme-accent-bar: #313131;
-  --theme-grid-line: #2f2f2f;
+  --theme-grid-line: #252525;
   --theme-status: #4ade80;
   --theme-placeholder: #d9d9d9;
   --theme-placeholder-light: #f1f1f1;
@@ -56,7 +56,7 @@ html[data-theme="light"] {
   --theme-nav-hover: #dcdcdc;
   --theme-surface: #ebebeb;
   --theme-accent-bar: #d4d4d4;
-  --theme-grid-line: #d0d0d0;
+  --theme-grid-line: #e6e6e6;
   --theme-status: #16a34a;
   --theme-placeholder: #bdbdbd;
   --theme-placeholder-light: #d9d9d9;
@@ -230,6 +230,153 @@ html[data-theme="light"] .theme-toggle__icon--light {
   height: 1px;
   transform: translateX(-50%);
   background-color: var(--color-grid-line);
+}
+
+.site-viewport-line {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  transform: translateX(-50%);
+  background-color: var(--color-grid-line);
+}
+
+.leadership-tabs {
+  position: relative;
+}
+
+.leadership-tabs__list {
+  position: relative;
+}
+
+.leadership-tab {
+  display: inline-block;
+  padding: 0;
+  padding-bottom: 16px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.leadership-tab[aria-selected="true"] {
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.leadership-tab[aria-selected="false"] {
+  font-weight: 300;
+  color: var(--color-muted);
+}
+
+.leadership-tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background-color: #006fff;
+  transition: transform 0.4s ease, width 0.4s ease;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leadership-tab-indicator {
+    transition: none;
+  }
+}
+
+.leadership-values-panel {
+  position: relative;
+}
+
+.leadership-values-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.leadership-values-grid__cell {
+  padding: 32px 20px;
+}
+
+.leadership-values-grid .leadership-values-grid__cell + .leadership-values-grid__cell {
+  border-top: 1px solid var(--color-grid-line);
+}
+
+@media (min-width: 640px) {
+  .leadership-values-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .leadership-values-grid .leadership-values-grid__cell + .leadership-values-grid__cell {
+    border-top: none;
+  }
+
+  .leadership-values-grid .leadership-values-grid__cell:nth-child(n + 3) {
+    border-top: 1px solid var(--color-grid-line);
+  }
+
+  .leadership-values-grid .leadership-values-grid__cell:nth-child(even) {
+    border-left: 1px solid var(--color-grid-line);
+  }
+}
+
+@media (min-width: 1024px) {
+  .leadership-values-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .leadership-values-grid .leadership-values-grid__cell:nth-child(n + 3) {
+    border-top: none;
+  }
+
+  .leadership-values-grid .leadership-values-grid__cell:nth-child(n + 2) {
+    border-left: 1px solid var(--color-grid-line);
+  }
+}
+
+.leadership-operations-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.leadership-operations-grid .leadership-values-grid__cell + .leadership-values-grid__cell {
+  border-top: 1px solid var(--color-grid-line);
+}
+
+@media (min-width: 640px) {
+  .leadership-operations-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .leadership-operations-grid .leadership-values-grid__cell + .leadership-values-grid__cell {
+    border-top: none;
+  }
+
+  .leadership-operations-grid .leadership-values-grid__cell:nth-child(n + 3) {
+    border-top: 1px solid var(--color-grid-line);
+  }
+
+  .leadership-operations-grid .leadership-values-grid__cell:nth-child(even) {
+    border-left: 1px solid var(--color-grid-line);
+  }
+}
+
+@media (min-width: 1024px) {
+  .leadership-operations-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .leadership-operations-grid .leadership-values-grid__cell:nth-child(n + 3) {
+    border-top: none;
+  }
+
+  .leadership-operations-grid .leadership-values-grid__cell:nth-child(n + 2) {
+    border-left: 1px solid var(--color-grid-line);
+  }
 }
 
 .structural-line {

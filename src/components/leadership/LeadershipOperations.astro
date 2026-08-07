@@ -1,0 +1,49 @@
+---
+import { leadership } from "../../content/leadership";
+
+const { operations } = leadership;
+---
+
+<section id="operations" aria-labelledby="operations-intro">
+  <h2
+    id="operations-intro"
+    class="grid-content-inset mt-10 max-w-[922px] text-[28px] font-light leading-[36px] text-heading sm:mt-12"
+  >
+    {operations.intro}
+  </h2>
+
+  <div class="leadership-values-panel mt-12 sm:mt-16">
+    <div class="site-viewport-line" aria-hidden="true"></div>
+
+    <div class="leadership-operations-grid">
+      {
+        operations.items.map((pillar) => (
+          <article class="leadership-values-grid__cell">
+            <h3 class="text-[18px] font-light leading-[24px] text-heading">
+              {pillar.titlePrefix}{" "}
+              <span class="font-semibold">{pillar.titleEmphasis}</span>
+            </h3>
+            <p class="mt-4 text-[14px] leading-[21px] text-text-secondary">
+              {pillar.tagline}
+            </p>
+            <p class="mt-4 text-[14px] leading-[21px] text-text-secondary">
+              {pillar.description}
+            </p>
+            <div class="mt-6">
+              <p class="text-[14px] font-semibold leading-[21px] text-heading">
+                Focus Areas:
+              </p>
+              <ul class="mt-2 list-disc space-y-1 pl-5 text-[14px] leading-[21px] text-text-secondary">
+                {pillar.focusAreas.map((area) => (
+                  <li>{area}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="site-viewport-line" aria-hidden="true"></div>
+  </div>
+</section>

@@ -1,0 +1,35 @@
+---
+import { leadership } from "../../content/leadership";
+
+const { values } = leadership;
+---
+
+<section id="values" aria-labelledby="values-intro">
+  <h2
+    id="values-intro"
+    class="grid-content-inset mt-10 max-w-[922px] text-[28px] font-light leading-[36px] text-heading sm:mt-12"
+  >
+    {values.intro}
+  </h2>
+
+  <div class="leadership-values-panel mt-12 sm:mt-16">
+    <div class="site-viewport-line" aria-hidden="true"></div>
+
+    <div class="leadership-values-grid">
+      {
+        values.items.map((value) => (
+          <article class="leadership-values-grid__cell">
+            <h3 class="text-[18px] font-semibold leading-[24px] text-heading">
+              {value.title}
+            </h3>
+            <p class="mt-4 text-[14px] leading-[21px] text-text-secondary">
+              {value.description}
+            </p>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="site-viewport-line" aria-hidden="true"></div>
+  </div>
+</section>

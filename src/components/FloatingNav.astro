@@ -1,6 +1,12 @@
 ---
 import { site } from "../content/site";
 import ThemeToggle from "./ThemeToggle.astro";
+
+const isLeadershipPage = Astro.url.pathname.startsWith("/leadership");
+
+function isNavItemActive(href: string) {
+  return href === "/leadership" && isLeadershipPage;
+}
 ---
 
 <a
@@ -14,7 +20,7 @@ import ThemeToggle from "./ThemeToggle.astro";
   <div class="grid-content-inset pb-5 pt-7">
     <nav class="flex items-center justify-between" aria-label="Primary">
       <a
-        href="#main"
+        href="/"
         class="text-[16px] font-semibold leading-none text-foreground transition-opacity hover:opacity-80"
       >
         {site.name}
@@ -23,16 +29,24 @@ import ThemeToggle from "./ThemeToggle.astro";
       <div class="flex items-center gap-1 sm:gap-2">
         <ul class="flex items-center gap-1 sm:gap-2">
           {
-            site.mainNav.map((item) => (
-              <li>
-                <a
-                  href={item.href}
-                  class="px-3 py-2 text-[16px] font-light leading-none text-foreground transition-opacity hover:opacity-80"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))
+            site.mainNav.map((item) => {
+              const isActive = isNavItemActive(item.href);
+
+              return (
+                <li>
+                  <a
+                    href={item.href}
+                    class:list={[
+                      "px-3 py-2 text-[16px] leading-none text-foreground transition-opacity hover:opacity-80",
+                      isActive ? "font-semibold" : "font-light",
+                    ]}
+                    {...(isActive ? { "aria-current": "page" } : {})}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })
           }
         </ul>
 
