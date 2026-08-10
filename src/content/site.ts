@@ -1,5 +1,5 @@
 export const site = {
-  name: "Evan McCormack",
+  name: "Sam McCormack",
   mainNav: [
     { label: "Work", href: "/#projects" },
     { label: "Experience", href: "/#experience" },
