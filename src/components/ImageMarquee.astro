@@ -135,7 +135,7 @@ const trackTiles = sequence.length > 0 ? [...sequence, ...sequence] : [];
     function onPointerMove(event) {
       if (!isDragging) return;
 
-      offset = dragStartOffset + (dragStartX - event.clientX);
+      offset = dragStartOffset + (event.clientX - dragStartX);
       normalizeOffset();
     }
 

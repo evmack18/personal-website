@@ -35,6 +35,7 @@ html[data-theme="dark"] {
   --theme-nav: #282828;
   --theme-nav-hover: #3f3f3f;
   --theme-surface: #282828;
+  --theme-experience-surface: #222222;
   --theme-accent-bar: #313131;
   --theme-grid-line: #252525;
   --theme-status: #4ade80;
@@ -55,6 +56,7 @@ html[data-theme="light"] {
   --theme-nav: #ebebeb;
   --theme-nav-hover: #dcdcdc;
   --theme-surface: #ebebeb;
+  --theme-experience-surface: #e4e4e4;
   --theme-accent-bar: #d4d4d4;
   --theme-grid-line: #e6e6e6;
   --theme-status: #16a34a;
@@ -220,6 +222,10 @@ html[data-theme="light"] .theme-toggle__icon--light {
   z-index: 1;
   width: 100vw;
   transform: translateX(-50%);
+}
+
+.experience-section-bg {
+  background-color: var(--theme-experience-surface);
 }
 
 .site-full-bleed-line {

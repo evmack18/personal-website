@@ -8,19 +8,23 @@ interface Props {
 const { study } = Astro.props;
 const slideCount = Math.max(study.slides.length, 1);
 const initialSlideLabel = `01 / ${String(slideCount).padStart(2, "0")}`;
+const carouselTitle = study.metadata.split("|")[0]?.trim() ?? "Case study";
+const [metadataCompany, metadataTimeframe] = study.metadata
+  .split("|")
+  .map((part) => part.trim());
 ---
 
 <article class="case-study">
   <div
     class="case-study-carousel"
     data-slide-count={slideCount}
-    data-title={study.title}
+    data-title={carouselTitle}
   >
     <div
       class="case-study-carousel__media relative w-full cursor-none overflow-hidden bg-placeholder-light"
       role="group"
       aria-roledescription="carousel"
-      aria-label={`${study.title} image carousel`}
+      aria-label={`${carouselTitle} image carousel`}
     >
       {
         study.slides.length > 0 ? (
@@ -147,12 +151,21 @@ const initialSlideLabel = `01 / ${String(slideCount).padStart(2, "0")}`;
   </div>
 
   <div class="mt-10 max-w-[836px] grid-content-inset">
-    <h2 class="text-[30px] font-normal leading-6 text-heading">
-      {study.title}
+    <h2 class="text-[30px] font-normal leading-[1.2] text-heading">
+      {study.headline}
     </h2>
     <div class="mt-5 space-y-0 text-[14px] leading-[21px] text-muted">
       {study.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
     </div>
+    <p class="mt-5 flex items-center gap-x-4 text-[14px] uppercase leading-[21px] text-muted">
+      <span>{metadataCompany}</span>
+      {metadataTimeframe ? (
+        <>
+          <span aria-hidden="true">|</span>
+          <span>{metadataTimeframe}</span>
+        </>
+      ) : null}
+    </p>
   </div>
 
   <div class="structural-line mt-8" aria-hidden="true"></div>
